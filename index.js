@@ -15,10 +15,10 @@ app.get("/news", async (req, res) => {
     return
   }
   const main = async () => {
-    const language = clm.getCountryByAlpha2(req.query.country).languages[0];
+    const language = clm.getCountryByAlpha2(req.query.country.toUpperCase()).languages[0];
     const translationResponse = await axios.get(
       `https://trampoline.turbowarp.org/translate/translate?language=${language}&text=${encodeURIComponent(
-        "News in " + lookup.byIso(req.query.country).country,
+        "News in " + lookup.byIso(req.query.country.toUpperCase()).country,
       )}`,
     );
     const translatedText = await translationResponse.data;
@@ -31,7 +31,7 @@ app.get("/news", async (req, res) => {
     if (req.query.alt) {
       articles = await news.search(query);
     } else {
-      articles = await news.geo(lookup.byIso(req.query.country).country, {
+      articles = await news.geo(lookup.byIso(req.query.country.toUpperCase()).country, {
         n: 15,
       });
     }
