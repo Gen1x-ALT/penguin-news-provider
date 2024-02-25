@@ -13,8 +13,8 @@ app.use(cors());
 
 app.get("/news", async (req, res) => {
   if (!req.query.country) {
-    res.json({"status": "error", "message": "country is required"})
-    return
+    res.json({ "status": "error", "message": "country is required" })
+    return;
   }
   const main = async () => {
     const language = clm.getCountryByAlpha2(req.query.country.toUpperCase()).languages[0];
@@ -42,7 +42,10 @@ app.get("/news", async (req, res) => {
     const prettifiedResponse = JSON.stringify(response, null, 2);
 
     res.json(JSON.parse(prettifiedResponse));
-  };
+  }; // Closing parenthesis was missing here
+
+  main(); // Invoke the main function
+});
 
 app.get("/news/accurate", async (req, res) => {
   if (!req.query.country) {
