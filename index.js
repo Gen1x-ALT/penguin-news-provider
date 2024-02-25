@@ -1,4 +1,5 @@
 const express = require("express");
+const rateLimit = require("express-rate-limit");
 const app = express();
 const googleNewsScraper = require("google-news-scraper");
 const lookup = require("country-code-lookup");
@@ -9,7 +10,21 @@ const axios = require("axios");
 const { parseString } = require("xml2js");
 const countryLanguage = require("country-language");
 
+const limiter = rateLimit({
+  windowMs: 5 * 60 * 1000, // 5 minutes
+  max: 50, // limit each IP to 50 requests per windowMs
+  validate: {
+    xForwardedForHeader: false,
+  },
+});
+
+app.use(limiter);
 app.use(cors());
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("<h1><center>Hello, PenguinNews!</center></h1>");
+});
 
 app.get("/news", async (req, res) => {
   if (!req.query.country) {
