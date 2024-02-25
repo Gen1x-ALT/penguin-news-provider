@@ -16,10 +16,13 @@
     "cors": "^2.8.5",
     "country-code-lookup": "^0.1.1",
     "country-data-codes": "^4.1.9",
+    "country-language": "^0.1.7",
     "country-locale-map": "^1.9.2",
     "express": "^4.18.2",
     "gnews": "^1.0.3",
     "google-news-scraper": "^1.2.0",
-    "node-fetch": "^3.2.6"
+    "node-fetch": "^3.2.6",
+    "serverless-http": "^3.2.0",
+    "xml2js": "^0.6.2"
   }
 }
