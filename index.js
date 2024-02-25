@@ -42,6 +42,49 @@ app.get("/news", async (req, res) => {
     res.json(JSON.parse(prettifiedResponse));
   };
 
+  app.get("/news/accurate", async (req, res) => {
+  if (!req.query.country) {
+    res.json({ "status": "error", "message": "country is required" });
+    return;
+  }
+
+  const country = req.query.country.toUpperCase();
+  const languageCode = countryLanguage.getLanguage(country).alpha2 || "en";
+  const rssFeedUrl = `https://news.google.com/rss?hl=${languageCode}&gl=${country}&ceid=${country}:es-419`;
+
+  try {
+    const rssResponse = await axios.get(rssFeedUrl);
+    const xmlData = rssResponse.data;
+
+    parseString(xmlData, { explicitArray: false }, (err, result) => {
+      if (err) {
+        res.status(500).json({ "status": "error", "message": "Error parsing XML" });
+        return;
+      }
+
+      const articles = result.rss.channel.item.slice(0, 25).map((item, index) => {
+        return {
+          number: index + 1,
+          title: item.title,
+          link: item.link,
+          guid: item.guid._,
+          pubDate: item.pubDate,
+          description: item.description,
+          source: {
+            url: item.source.$.url,
+            name: item.source._
+          }
+        };
+      });
+
+      const response = { status: "success", articles: articles };
+      res.json(response);
+    });
+  } catch (error) {
+    res.status(500).json({ "status": "error", "message": "Error fetching RSS feed" });
+  }
+});
+
   main();
 });
 
