@@ -70,7 +70,7 @@ app.get("/news/accurate", async (req, res) => {
         return;
       }
 
-      const articles = result.rss.channel.item.slice(0, 25).map((item, index) => {
+      const articles = result.rss.channel.item.slice(0, 15).map((item, index) => {
         return {
           number: index + 1,
           title: item.title,
