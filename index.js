@@ -44,15 +44,18 @@ app.get("/news", async (req, res) => {
     res.json(JSON.parse(prettifiedResponse));
   };
 
-  app.get("/news/accurate", async (req, res) => {
+app.get("/news/accurate", async (req, res) => {
   if (!req.query.country) {
     res.json({ "status": "error", "message": "country is required" });
     return;
   }
 
   const country = req.query.country.toUpperCase();
-  const languageCode = countryLanguage.getLanguage(country).alpha2 || "en";
-  const rssFeedUrl = `https://news.google.com/rss?hl=${languageCode}&gl=${country}&ceid=${country}:es-419`;
+  const languageInfo = countryLanguage.getLanguage(country);
+  const languageCode = languageInfo ? languageInfo.alpha2 : "en"; // Default to English if language code is not found
+  const rssFeedUrl = `https://news.google.com/rss?hl=undefined&gl=${country}&ceid=${country}:undefined`;
+
+  console.log(rssFeedUrl)
 
   try {
     const rssResponse = await axios.get(rssFeedUrl);
@@ -85,9 +88,6 @@ app.get("/news", async (req, res) => {
   } catch (error) {
     res.status(500).json({ "status": "error", "message": "Error fetching RSS feed" });
   }
-});
-
-  main();
 });
 
 app.listen(3000, () => {
