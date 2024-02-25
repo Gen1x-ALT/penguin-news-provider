@@ -6,6 +6,8 @@ const clm = require("country-locale-map");
 const cors = require("cors");
 const news = require("gnews");
 const axios = require("axios");
+const { parseString } = require("xml2js");
+const countryLanguage = require("country-language");
 
 app.use(cors());
 
