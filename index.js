@@ -44,7 +44,7 @@ app.get("/news", async (req, res) => {
     res.json(JSON.parse(prettifiedResponse));
   };
 
-  app.get("/news/accurate/", async (req, res) => {
+  app.get("/news/accurate", async (req, res) => {
   if (!req.query.country) {
     res.json({ "status": "error", "message": "country is required" });
     return;
